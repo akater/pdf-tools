@@ -3,45 +3,6 @@
 ;;; Commentary:
 ;; test helper inspired from https://github.com/tonini/overseer.el/blob/master/test/test-helper.el
 
-;;; Code:
-
-(require 'package)
-(require 'ert)
-(require 'cl-lib)
-
-(unless (getenv "PACKAGE_TAR")
-  (error "Missing package tar. Must be passed by PACKAGE_TAR env variable"))
-
-(defvar pdf-tools-package (expand-file-name (getenv "PACKAGE_TAR")))
-
-(unless (and (file-exists-p pdf-tools-package)
-             (string-match "\\.tar\\'" pdf-tools-package))
-  (error "Invalid tar package:" pdf-tools-package))
-
-(unless load-file-name
-  (error "load-file-name is unset"))
-
-(cd (file-name-directory load-file-name))
-(setq package-user-dir (expand-file-name "elpa" (make-temp-file "package" t)))
-
-(defvar cask-elpa
-  (cl-labels ((directory-if-exists-p (directory)
-                (and (file-directory-p directory)
-                     directory)))
-    (or (directory-if-exists-p
-         (format "../.cask/%s/elpa" emacs-version))
-        (directory-if-exists-p
-         (format "../.cask/%d.%d/elpa"
-                 emacs-major-version emacs-minor-version))
-        (error "Do `cask install' first"))))
-
-(add-to-list 'package-directory-list cask-elpa)
-(add-hook 'kill-emacs-hook (lambda nil
-                             (when (file-exists-p package-user-dir)
-                               (delete-directory package-user-dir t))))
-(package-initialize)
-(package-install-file pdf-tools-package)
-
 ;; FIXME: Move functions to new, loadable file.
 ;; Fake skipped as accepted failures if skip-unless is not available.
 (unless (fboundp 'ert--skip-unless)
