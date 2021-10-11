@@ -52,7 +52,6 @@
   `(pdf-test-with-pdf "encrypted.pdf" ,@body))
 
 ;; ---
-(require 'f)
 (require 'let-alist)
 (require 'pdf-info)
 (require 'ert)
