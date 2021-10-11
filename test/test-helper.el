@@ -52,8 +52,6 @@
   `(pdf-test-with-pdf "encrypted.pdf" ,@body))
 
 ;; ---
-(require 'undercover)
-(undercover "lisp/*.el")
 (require 'let-alist)
 (require 'pdf-info)
 (require 'ert)
